@@ -1,170 +1,1206 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>.✦ ݁˖ Site 15 anos .✦ ݁˖</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>F1 Quiz 2026 - Adivinhe o Piloto</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: #0a0a0a;
+    color: #fff;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(225,6,0,0.15) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(0,100,255,0.12) 0%, transparent 50%);
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .header {
+    position: sticky;
+    top: 0;
+    background: rgba(10,10,10,0.95);
+    backdrop-filter: blur(10px);
+    padding: 1rem 0;
+    border-bottom: 2px solid #e10600;
+    z-index: 100;
+  }
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+  .logo {
+    font-size: 1.6rem;
+    font-weight: 900;
+    font-style: italic;
+    letter-spacing: 2px;
+    background: linear-gradient(90deg, #e10600, #ff6b00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: #e10600; }
+
+  .hero {
+    padding: 4rem 2rem 2rem;
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .hero-badge {
+    display: inline-block;
+    padding: 0.5rem 1.5rem;
+    background: rgba(225,6,0,0.15);
+    border: 1px solid #e10600;
+    border-radius: 50px;
+    color: #ff6b00;
+    font-weight: 700;
+    letter-spacing: 3px;
+    font-size: 0.8rem;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: clamp(2rem, 6vw, 4rem);
+    font-weight: 900;
+    font-style: italic;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #fff 0%, #e10600 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero p {
+    font-size: 1.1rem;
+    color: #bbb;
+    line-height: 1.6;
+    max-width: 650px;
+    margin: 0 auto;
+  }
+
+  .game-section {
+    padding: 2rem 2rem 5rem;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .section-title {
+    text-align: center;
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 900;
+    font-style: italic;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    letter-spacing: -1px;
+  }
+  .section-title span { color: #e10600; }
+
+  /* Fase badge */
+  .phase-badge {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  .phase-badge-inner {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.7rem 1.8rem;
+    background: linear-gradient(135deg, #1a1a1a, #0f0f0f);
+    border: 2px solid #e10600;
+    border-radius: 50px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.9rem;
+    box-shadow: 0 0 30px rgba(225,6,0,0.3);
+  }
+  .phase-badge-inner .phase-num {
+    color: #ff6b00;
+    font-size: 1.1rem;
+  }
+  .phase-badge-inner .phase-name { color: #fff; }
+
+  .game-card {
+    background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+    border: 1px solid #2a2a2a;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    position: relative;
+    overflow: hidden;
+  }
+  .game-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #e10600, #ff6b00, #e10600);
+    background-size: 200% 100%;
+    animation: gradientShift 3s linear infinite;
+  }
+  @keyframes gradientShift {
+    0% { background-position: 0% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  .stats-container {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .stat-item {
+    text-align: center;
+    padding: 0.6rem 1.2rem;
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: 12px;
+    min-width: 90px;
+  }
+  .stat-value {
+    font-size: 1.6rem;
+    font-weight: 900;
+    font-style: italic;
+    color: #e10600;
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 0.7rem;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 0.3rem;
+  }
+
+  .progress-container {
+    display: flex;
+    justify-content: center;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+  }
+  .progress-dot {
+    width: 60px;
+    height: 6px;
+    background: #2a2a2a;
+    border-radius: 3px;
+    transition: all 0.3s;
+  }
+  .progress-dot.active {
+    background: #e10600;
+    box-shadow: 0 0 15px rgba(225,6,0,0.8);
+  }
+  .progress-dot.wrong { background: #444; }
+  .progress-dot.correct {
+    background: #00d26a;
+    box-shadow: 0 0 15px rgba(0,210,106,0.8);
+  }
+
+  .attempts-info {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #999;
+    font-size: 1rem;
+  }
+  .attempts-info strong { color: #e10600; font-size: 1.15rem; }
+
+  .inputs-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+  .input-label {
+    display: block;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #999;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+  }
+  .input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .input-icon {
+    position: absolute;
+    left: 1rem;
+    font-size: 1.2rem;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .game-input {
+    width: 100%;
+    padding: 1rem 1rem 1rem 3.2rem;
+    background: #0a0a0a;
+    border: 2px solid #2a2a2a;
+    border-radius: 12px;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.3s;
+    font-family: inherit;
+  }
+  .game-input:focus {
+    outline: none;
+    border-color: #e10600;
+    box-shadow: 0 0 20px rgba(225,6,0,0.3);
+  }
+  .game-input:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .autocomplete {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #1a1a1a;
+    border: 2px solid #e10600;
+    border-top: none;
+    border-radius: 0 0 12px 12px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 100;
+    display: none;
+  }
+  .autocomplete.show { display: block; }
+  .autocomplete-item {
+    padding: 0.7rem 1rem 0.7rem 3.2rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-weight: 500;
+  }
+  .autocomplete-item:hover { background: #e10600; }
+
+  .guess-btn {
+    width: 100%;
+    padding: 1.1rem;
+    background: linear-gradient(135deg, #e10600, #ff1a0e);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 900;
+    font-style: italic;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: inherit;
+  }
+  .guess-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(225,6,0,0.5);
+  }
+  .guess-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .feedback { margin-top: 1.5rem; }
+  .feedback-card {
+    padding: 1rem 1.2rem;
+    border-radius: 12px;
+    border-left: 4px solid;
+    background: #0a0a0a;
+    margin-bottom: 0.8rem;
+    animation: fadeIn 0.4s;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .feedback-card.correct {
+    border-color: #00d26a;
+    background: rgba(0,210,106,0.08);
+  }
+  .feedback-card.wrong {
+    border-color: #e10600;
+    background: rgba(225,6,0,0.08);
+  }
+  .feedback-card.hint {
+    border-color: #ffb800;
+    background: rgba(255,184,0,0.08);
+  }
+  .feedback-title {
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+    font-size: 0.95rem;
+  }
+  .feedback-text {
+    color: #ccc;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+  .feedback-text strong { color: #fff; }
+
+  .result-container {
+    display: none;
+    text-align: center;
+    padding: 1.5rem 0;
+  }
+  .result-container.show {
+    display: block;
+    animation: fadeIn 0.5s;
+  }
+  .result-emoji { font-size: 4rem; margin-bottom: 0.8rem; }
+  .result-title {
+    font-size: 1.8rem;
+    font-weight: 900;
+    font-style: italic;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .result-title.win { color: #00d26a; }
+  .result-title.lose { color: #e10600; }
+  .result-text {
+    color: #ccc;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .result-answer {
+    background: #1a1a1a;
+    border: 2px solid #2a2a2a;
+    border-radius: 12px;
+    padding: 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+  .result-answer-label {
+    font-size: 0.75rem;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 0.4rem;
+  }
+  .result-answer-value {
+    font-size: 1.4rem;
+    font-weight: 900;
+    font-style: italic;
+    color: #e10600;
+  }
+  .result-answer-team {
+    font-size: 1rem;
+    color: #ff6b00;
+    margin-top: 0.3rem;
+    font-weight: 600;
+  }
+  .result-details {
+    display: flex;
+    justify-content: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+  }
+  .detail-chip {
+    padding: 0.4rem 0.9rem;
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    color: #ccc;
+  }
+  .detail-chip strong { color: #fff; }
+
+  .next-btn {
+    padding: 1rem 2.5rem;
+    background: linear-gradient(135deg, #e10600, #ff1a0e);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 900;
+    font-style: italic;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: inherit;
+  }
+  .next-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(225,6,0,0.5);
+  }
+  .next-btn.secondary {
+    background: #2a2a2a;
+    border: 2px solid #e10600;
+  }
+
+  /* Upgrade de fase */
+  .phase-upgrade {
+    display: none;
+    text-align: center;
+    padding: 2rem 0;
+  }
+  .phase-upgrade.show {
+    display: block;
+    animation: fadeIn 0.5s;
+  }
+  .phase-upgrade-emoji {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    animation: bounce 1s ease infinite;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+  }
+  .phase-upgrade-title {
+    font-size: 1.6rem;
+    font-weight: 900;
+    font-style: italic;
+    text-transform: uppercase;
+    color: #ff6b00;
+    margin-bottom: 0.8rem;
+  }
+  .phase-upgrade-text {
+    color: #ccc;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+
+  .how-to-play {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: #1a1a1a;
+    border-radius: 15px;
+    border: 1px solid #2a2a2a;
+  }
+  .how-to-play h3 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    color: #e10600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .how-to-play ol {
+    padding-left: 1.5rem;
+    color: #ccc;
+    line-height: 1.8;
+    font-size: 0.95rem;
+  }
+  .how-to-play li { margin-bottom: 0.4rem; }
+  .how-to-play strong { color: #e10600; }
+
+  .footer {
+    padding: 2rem;
+    text-align: center;
+    border-top: 1px solid #1a1a1a;
+    color: #666;
+    font-size: 0.85rem;
+  }
+  .footer strong { color: #e10600; }
+
+  /* ===== ANIMAÇÃO DAS BANDEIRAS QUADRICULADAS ===== */
+  .flags-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 60;
+    opacity: 0;
+    overflow: hidden;
+    transition: opacity 0.3s;
+  }
+  .flags-overlay.show { opacity: 1; }
+
+  .flag {
+    position: absolute;
+    width: 120px;
+    height: 80px;
+    background:
+      linear-gradient(45deg, #000 25%, transparent 25%) 0 0 / 40px 40px,
+      linear-gradient(-45deg, #000 25%, transparent 25%) 0 20px / 40px 40px,
+      linear-gradient(45deg, transparent 75%, #000 75%) 20px -20px / 40px 40px,
+      linear-gradient(-45deg, transparent 75%, #000 75%) -20px 0 / 40px 40px;
+    background-color: #fff;
+    border: 3px solid #000;
+    border-radius: 4px;
+    box-shadow: 0 0 30px rgba(255,255,255,0.4);
+    opacity: 0;
+    animation: flagFly 3s ease-in-out forwards;
+  }
+
+  @keyframes flagFly {
+    0% {
+      opacity: 0;
+      transform: translateX(-200px) rotate(-20deg) scale(0.5);
+    }
+    15% {
+      opacity: 1;
+      transform: translateX(10vw) rotate(-15deg) scale(1.1);
+    }
+    30% {
+      transform: translateX(30vw) rotate(-5deg) scale(1);
+    }
+    50% {
+      transform: translateX(50vw) rotate(5deg) scale(1.1);
+    }
+    70% {
+      transform: translateX(70vw) rotate(10deg) scale(1);
+    }
+    85% {
+      opacity: 1;
+      transform: translateX(90vw) rotate(20deg) scale(1.1);
+    }
+    100% {
+      opacity: 0;
+      transform: translateX(110vw) rotate(30deg) scale(0.8);
+    }
+  }
+
+  /* Confete quadriculado */
+  .confetti {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    opacity: 0;
+    animation: confettiFall 3s linear forwards;
+  }
+  @keyframes confettiFall {
+    0% {
+      opacity: 1;
+      transform: translateY(-100px) rotate(0deg);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(110vh) rotate(720deg);
+    }
+  }
+
+  /* Flash verde de acerto */
+  .success-flash {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle, rgba(0,210,106,0.4), transparent 70%);
+    pointer-events: none;
+    z-index: 55;
+    opacity: 0;
+    animation: successFlash 1s ease-out;
+  }
+  @keyframes successFlash {
+    0% { opacity: 0; }
+    30% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  @media (max-width: 600px) {
+    .nav-links { display: none; }
+    .game-card { padding: 1.2rem; }
+    .progress-dot { width: 40px; }
+    .stat-item { min-width: 75px; padding: 0.5rem 0.8rem; }
+    .stat-value { font-size: 1.3rem; }
+    .flag { width: 80px; height: 55px; }
+  }
+</style>
 </head>
-
 <body>
-    <!-- FAIXA DO MENU -->
-    <header>
-        <div class="logo">
-            <!-- OPÇÃO 1: COM %20 (se mantiver o nome com espaços) -->
-             <div class="logo">
-    <img src="logo-15-anos.png" alt="Logo 15 Anos" height="50">
-</div>
-            
-            <!-- OPÇÃO 2: COM NOME RENOMEADO (RECOMENDADO) -->
-            <!-- <img src="logo-15-anos.png" alt="Logo 15 Anos" height="50"> -->
+
+<header class="header">
+  <nav class="nav">
+    <div class="logo">🏎️ F1 QUIZ</div>
+    <ul class="nav-links">
+      <li><a href="#home">Início</a></li>
+      <li><a href="#game">Jogar</a></li>
+    </ul>
+  </nav>
+</header>
+
+<section class="hero" id="home">
+  <div class="hero-badge">🏁 Temporada 2026 + Lendas</div>
+  <h1>Adivinhe o Piloto</h1>
+  <p>Você tem <strong style="color:#e10600">4 tentativas</strong> para descobrir quem é o piloto misterioso e qual equipe ele corre. Acerte 3 rodadas para desbloquear a <strong style="color:#ff6b00">Fase das Lendas</strong>!</p>
+</section>
+
+<section class="game-section" id="game">
+  <h2 class="section-title">O <span>Desafio</span></h2>
+
+  <div class="phase-badge">
+    <div class="phase-badge-inner">
+      <span>🏆 FASE</span>
+      <span class="phase-num" id="phaseNum">1</span>
+      <span class="phase-name" id="phaseName">Grid 2026</span>
+    </div>
+  </div>
+
+  <div class="game-card">
+    <div class="stats-container">
+      <div class="stat-item">
+        <div class="stat-value" id="statPuzzles">0</div>
+        <div class="stat-label">Rodada</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" id="statWins">0</div>
+        <div class="stat-label">Acertos</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" id="statStreak">0</div>
+        <div class="stat-label">Sequência</div>
+      </div>
+    </div>
+
+    <div class="progress-container" id="progressContainer">
+      <div class="progress-dot active"></div>
+      <div class="progress-dot"></div>
+      <div class="progress-dot"></div>
+      <div class="progress-dot"></div>
+    </div>
+
+    <div class="attempts-info">
+      Tentativa <strong id="currentAttempt">1</strong> de <strong>4</strong>
+    </div>
+
+    <div class="inputs-container" id="inputsContainer">
+      <div>
+        <label class="input-label">🏁 Piloto</label>
+        <div class="input-wrapper">
+          <span class="input-icon">👤</span>
+          <input type="text" class="game-input" id="pilotInput" placeholder="Digite o nome do piloto..." autocomplete="off">
+          <div class="autocomplete" id="pilotAutocomplete"></div>
         </div>
-        <nav>
-            <a href="#inicio">✦ Início</a>
-            <a href="#precos">✦ Tabelas</a>
-            <a href="#fotos">✦ Fotos</a>
-            <a href="#sobre">✦ Sobre</a>
-            <a href="#contato">✦ Contato</a>
-        </nav>
-    </header>
+      </div>
 
-    <!-- SEÇÃO INÍCIO -->
-    <section id="inicio" class="secao-inicio">
-        <div class="conteudo-inicio">
-            <span class="badge">✦ 15 ANOS ✦</span>
-            <h1>Uma noite <br><span class="destaque">para recordar</span></h1>
-            <p class="subtitulo">Bem-vinda à celebração dos seus 15 anos!</p>
-            <div class="decoracao">✦ ✦ ✦</div>
-            <div class="logo">
-    <img src="logo-15-anos.png" alt="Logo 15 Anos" height="50">
-</div>
+      <div>
+        <label class="input-label">🏆 Equipe</label>
+        <div class="input-wrapper">
+          <span class="input-icon">🏎️</span>
+          <input type="text" class="game-input" id="teamInput" placeholder="Digite o nome da equipe..." autocomplete="off">
+          <div class="autocomplete" id="teamAutocomplete"></div>
         </div>
-    </section>
+      </div>
+    </div>
 
-    <!-- SEÇÃO TABELAS DE PREÇO -->
-    <section id="precos">
-        <h2>✮⋆˙ Tabelas de Preço ✮⋆˙</h2>
-        <p class="descricao">Escolha o pacote perfeito para a sua festa dos sonhos</p>
+    <button class="guess-btn" id="guessBtn">🏁 Enviar Palpite</button>
 
-        <div class="tabela-precos">
-            <div class="pacote">
-                <div class="cabecalho-pacote">
-                    <h3>🌟 Básico</h3>
-                    <span class="preco">R$ 11.500</span>
-                </div>
-                <ul class="beneficios">
-                    <li>✓ Decoração simples</li>
-                    <li>✓ Bolo + Doces</li>
-                    <li>✓ Playlist digital</li>
-                    <li>✓ Espaço para 50 convidados</li>
-                </ul>
-                <a href="#contato" class="btn-saiba-mais">Solicitar</a>
-            </div>
+    <div class="feedback" id="feedback"></div>
 
-            <div class="pacote destaque-pacote">
-                <div class="etiqueta">✦ MAIS ESCOLHIDO ✦</div>
-                <div class="cabecalho-pacote">
-                    <h3>💎 Premium</h3>
-                    <span class="preco">R$15.900</span>
-                </div>
-                <ul class="beneficios">
-                    <li>✓ Decoração temática</li>
-                    <li>✓ Buffet completo</li>
-                    <li>✓ DJ + Iluminação</li>
-                    <li>✓ Espaço para 120 convidados</li>
-                    <li>✓ Camarim exclusivo</li>
-                </ul>
-                <a href="#contato" class="btn-saiba-mais">Solicitar</a>
-            </div>
+    <div class="result-container" id="resultContainer"></div>
 
-            <div class="pacote">
-                <div class="cabecalho-pacote">
-                    <h3>👑 Luxo</h3>
-                    <span class="preco">R$ 30.200</span>
-                </div>
-                <ul class="beneficios">
-                    <li>✓ Decoração premium</li>
-                    <li>✓ Buffet Gourmet</li>
-                    <li>✓ Banda ao vivo</li>
-                    <li>✓ Espaço para 200 convidados</li>
-                    <li>✓ Vídeo + Fotógrafo</li>
-                    <li>✓ Carro de luxo</li>
-                </ul>
-                <a href="#contato" class="btn-saiba-mais">Solicitar</a>
-            </div>
-        </div>
-    </section>
+    <div class="phase-upgrade" id="phaseUpgrade"></div>
+  </div>
 
-    <!-- SEÇÃO FOTOS -->
-    <section id="fotos">
-        <h2>✮⋆˙ Galeria de Fotos ✮⋆˙</h2>
-        <p class="descricao">Inspire-se com momentos inesquecíveis</p>
+  <div class="how-to-play">
+    <h3>📖 Como Jogar</h3>
+    <ol>
+      <li><strong>Fase 1 - Grid 2026:</strong> acerte 3 pilotos do grid atual para avançar.</li>
+      <li><strong>Fase 2 - Lendas da F1:</strong> Senna, Schumacher, Prost e outros ícones!</li>
+      <li>Você tem <strong>4 tentativas</strong> por rodada para acertar <strong>piloto E equipe</strong>.</li>
+      <li>Dicas aparecem a cada palpite (🔥 perto, 🌡️ morno, ❄️ longe).</li>
+      <li>Errou as 4? O jogo revela a resposta e você pode tentar de novo.</li>
+    </ol>
+  </div>
+</section>
 
-        <div class="galeria-grid">
-            <div class="foto-item">
-                <img src="https://produtora7.com.br/wp-content/uploads/2025/08/Festa-de-15-anos-completa-1024x683.jpg" alt="Festa 15 anos">
-                <div class="legenda">✨ Decoração Encantadora</div>
-            </div>
-            <div class="foto-item">
-                <img src="https://cdn.alboompro.com/5e5829eb68fee500019bc6fe_676de9dda2349e000115f427/large/festa_de_15_anos_da_debutante_evellyn_buffet_cedrom_av_dr_candido_motta_filho_922-_cidade_sao_francisco_sao-paulo-_sp_-05351-000_brasil-76.jpg?v=1" alt="Festa 15 anos">
-                <div class="legenda">🌸 Mesa de Doces</div>
-            </div>
-            <div class="foto-item">
-                <img src="https://bisutti.com.br/wp-content/uploads/2022/02/CI_DE_21.11.19-36-1-1-scaled-1.jpg" alt="Festa 15 anos">
-                <div class="legenda">💃 Pista de Dança</div>
-            </div>
-            <div class="foto-item">
-                <img src="https://www.terra.com.br/vida-e-estilo/casa-e-decoracao/viva-decora/bolo-de-15-anos-100-modelos-e-fotos-de-bolos-lindos-para-sua-festa,333af6de069ccc1643599ebd2bcd59ddaphu5xfd.html" alt="Festa 15 anos">
-                <div class="legenda">🎂 Bolo dos Sonhos</div>
-            </div>
-            <div class="foto-item">
-                <img src="https://blog.portalfestas.com.br/wp-content/uploads/2022/04/festa-de-15-anos-simples-1.jpg" alt="Festa 15 anos">
-                <div class="legenda">🎈 Chegada da Debutante</div>
-            </div>
-            <div class="foto-item">
-                <img src="https://www.minhafesta.com.br/blog/wp-content/uploads/2023/02/festa-de-15-anos-decoracao-luxo-1.jpg" alt="Festa 15 anos">
-                <div class="legenda">🌟 Noite Mágica</div>
-            </div>
-        </div>
-    </section>
+<footer class="footer">
+  <p>🏎️ <strong>F1 Quiz</strong> - Fase 2026 + Lendas Históricas</p>
+  <p style="margin-top:0.4rem;">Homenagem a Ayrton Senna e todas as lendas 🏁</p>
+</footer>
 
-    <!-- SEÇÃO SOBRE -->
-    <section id="sobre">
-        <h2 class="titulo-destaque">✦ Sobre Nós ✦</h2>
-        
-        <div class="texto-sobre">
-            <h3>✮⋆˙ Como funciona a nossa magia? ✮⋆˙</h3>
-            <p>
-                Sabemos que planejar uma festa pode parecer um desafio, mas aqui, a nossa missão é transformar esse processo em uma experiência leve e prazerosa. Funciona assim: ouvimos atentamente os seus desejos, cuidamos de cada detalhe técnico (sonorização, iluminação, espaço) e alinhamos tudo com a mais alta qualidade, para que no grande dia, a única preocupação de vocês seja se divertir. Da montagem à despedida, estamos ao seu lado, garantindo que tudo saia exatamente como planejado.
-            </p>
+<!-- Overlay das bandeiras -->
+<div class="flags-overlay" id="flagsOverlay"></div>
 
-            <h3>𓂃 ✮⋆˙ Nosso Compromisso com Você ✮⋆˙ 𓂃</h3>
-            <p>
-                Nosso compromisso vai além do contrato. É com a sua felicidade. Valorizamos a transparência, a pontualidade e a excelência. Aqui, cada festa é única, porque cada cliente é único. Nosso maior orgulho é saber que, ao final da noite, olhamos nos olhos de vocês e vemos a realização de um sonho. E é por isso que estamos aqui há <strong>15 anos</strong>: porque o nosso negócio é feito de gente, de emoção e de confiança.
-            </p>
-        </div>
-    </section>
+<script>
+/* ============ FASE 1: GRID F1 2026 ============ */
+const PILOTS_2026 = [
+  { name: "Max Verstappen", team: "Red Bull Racing", nationality: "Holandês", number: 3 },
+  { name: "Isack Hadjar", team: "Red Bull Racing", nationality: "Francês", number: 6 },
+  { name: "George Russell", team: "Mercedes", nationality: "Britânico", number: 63 },
+  { name: "Kimi Antonelli", team: "Mercedes", nationality: "Italiano", number: 12 },
+  { name: "Charles Leclerc", team: "Ferrari", nationality: "Monegasco", number: 16 },
+  { name: "Lewis Hamilton", team: "Ferrari", nationality: "Britânico", number: 44 },
+  { name: "Lando Norris", team: "McLaren", nationality: "Britânico", number: 1 },
+  { name: "Oscar Piastri", team: "McLaren", nationality: "Australiano", number: 81 },
+  { name: "Fernando Alonso", team: "Aston Martin", nationality: "Espanhol", number: 14 },
+  { name: "Lance Stroll", team: "Aston Martin", nationality: "Canadense", number: 18 },
+  { name: "Pierre Gasly", team: "Alpine", nationality: "Francês", number: 10 },
+  { name: "Franco Colapinto", team: "Alpine", nationality: "Argentino", number: 43 },
+  { name: "Esteban Ocon", team: "Haas", nationality: "Francês", number: 31 },
+  { name: "Oliver Bearman", team: "Haas", nationality: "Britânico", number: 87 },
+  { name: "Gabriel Bortoleto", team: "Audi", nationality: "Brasileiro", number: 5 },
+  { name: "Nico Hulkenberg", team: "Audi", nationality: "Alemão", number: 27 },
+  { name: "Sergio Perez", team: "Cadillac", nationality: "Mexicano", number: 11 },
+  { name: "Valtteri Bottas", team: "Cadillac", nationality: "Finlandês", number: 77 },
+  { name: "Alexander Albon", team: "Williams", nationality: "Tailandês", number: 23 },
+  { name: "Carlos Sainz", team: "Williams", nationality: "Espanhol", number: 55 },
+  { name: "Liam Lawson", team: "Racing Bulls", nationality: "Neozelandês", number: 30 },
+  { name: "Arvid Lindblad", team: "Racing Bulls", nationality: "Britânico", number: 41 }
+];
 
-    <!-- SEÇÃO CONTATO -->
-    <section id="contato">
-        <h2>✮⋆˙ Contato ✮⋆˙</h2>
-        <p class="descricao">Entre em contato e realize o sonho da sua festa!</p>
-        
-        <div class="contato-info">
-            <div class="contato-item">
-                <span class="icone">📱</span>
-                <span><strong>(42) 99986-4328</strong></span>
-            </div>
-            <div class="contato-item">
-                <span class="icone">📸</span>
-                <span><strong>@recordar15</strong></span>
-            </div>
-            <div class="contato-item">
-                <span class="icone">✉️</span>
-                <span><strong>contato@recordar15.com</strong></span>
-            </div>
-        </div>
-    </section>
+/* ============ FASE 2: LENDAS DA F1 ============ */
+const PILOTS_LEGENDS = [
+  { name: "Ayrton Senna", team: "McLaren", nationality: "Brasileiro", number: 12, era: "1984-1994" },
+  { name: "Ayrton Senna", team: "Lotus", nationality: "Brasileiro", number: 12, era: "1985-1987" },
+  { name: "Michael Schumacher", team: "Ferrari", nationality: "Alemão", number: 1, era: "1996-2006" },
+  { name: "Michael Schumacher", team: "Benetton", nationality: "Alemão", number: 5, era: "1991-1995" },
+  { name: "Alain Prost", team: "Williams", nationality: "Francês", number: 2, era: "1993" },
+  { name: "Alain Prost", team: "McLaren", nationality: "Francês", number: 1, era: "1984-1989" },
+  { name: "Niki Lauda", team: "Ferrari", nationality: "Austríaco", number: 1, era: "1974-1977" },
+  { name: "Niki Lauda", team: "McLaren", nationality: "Austríaco", number: 8, era: "1982-1985" },
+  { name: "Juan Manuel Fangio", team: "Mercedes", nationality: "Argentino", number: 2, era: "1954-1955" },
+  { name: "Juan Manuel Fangio", team: "Alfa Romeo", nationality: "Argentino", number: 34, era: "1950-1951" },
+  { name: "Sebastian Vettel", team: "Red Bull Racing", nationality: "Alemão", number: 5, era: "2009-2014" },
+  { name: "Sebastian Vettel", team: "Ferrari", nationality: "Alemão", number: 5, era: "2015-2020" },
+  { name: "Kimi Raikkonen", team: "Ferrari", nationality: "Finlandês", number: 7, era: "2007-2009" },
+  { name: "Kimi Raikkonen", team: "McLaren", nationality: "Finlandês", number: 9, era: "2002-2006" },
+  { name: "Nelson Piquet", team: "Williams", nationality: "Brasileiro", number: 5, era: "1986-1987" },
+  { name: "Nelson Piquet", team: "Brabham", nationality: "Brasileiro", number: 5, era: "1978-1985" },
+  { name: "Nigel Mansell", team: "Williams", nationality: "Britânico", number: 5, era: "1985-1992" },
+  { name: "Jackie Stewart", team: "Tyrrell", nationality: "Britânico", number: 3, era: "1965-1973" },
+  { name: "Jim Clark", team: "Lotus", nationality: "Britânico", number: 4, era: "1960-1968" },
+  { name: "Graham Hill", team: "BRM", nationality: "Britânico", number: 4, era: "1960-1965" },
+  { name: "Emerson Fittipaldi", team: "McLaren", nationality: "Brasileiro", number: 1, era: "1972-1975" },
+  { name: "Emerson Fittipaldi", team: "Lotus", nationality: "Brasileiro", number: 6, era: "1970-1973" },
+  { name: "Mika Hakkinen", team: "McLaren", nationality: "Finlandês", number: 8, era: "1993-2001" },
+  { name: "Jenson Button", team: "Brawn GP", nationality: "Britânico", number: 22, era: "2009" },
+  { name: "Jenson Button", team: "McLaren", nationality: "Britânico", number: 3, era: "2010-2016" },
+  { name: "Nico Rosberg", team: "Mercedes", nationality: "Alemão", number: 6, era: "2010-2016" },
+  { name: "Jacques Villeneuve", team: "Williams", nationality: "Canadense", number: 3, era: "1996-1998" },
+  { name: "Damon Hill", team: "Williams", nationality: "Britânico", number: 5, era: "1993-1996" }
+];
+
+/* ============ ESTADO ============ */
+let currentPhase = 1;
+let currentPilot = null;
+let currentAttempt = 1;
+let roundOver = false;
+let usedPilotNames = [];
+let stats = {
+  winsInPhase: 0,      // acertos na fase atual
+  winsTotal: 0,        // total de acertos
+  streak: 0,           // sequência
+  puzzles: 0           // rodadas jogadas
+};
+
+const WINS_TO_ADVANCE = 3; // acertos necessários para avançar de fase
+
+/* ============ DOM ============ */
+const pilotInput = document.getElementById('pilotInput');
+const teamInput = document.getElementById('teamInput');
+const pilotAC = document.getElementById('pilotAutocomplete');
+const teamAC = document.getElementById('teamAutocomplete');
+const guessBtn = document.getElementById('guessBtn');
+const feedbackEl = document.getElementById('feedback');
+const resultEl = document.getElementById('resultContainer');
+const phaseUpgradeEl = document.getElementById('phaseUpgrade');
+const inputsContainer = document.getElementById('inputsContainer');
+const progressContainer = document.getElementById('progressContainer');
+const flagsOverlay = document.getElementById('flagsOverlay');
+
+/* ============ HELPERS ============ */
+function normalize(str) {
+  return String(str)
+    .toLowerCase()
+    .trim()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9\s]/g, "")
+    .replace(/\s+/g, " ");
+}
+
+function similarity(a, b) {
+  a = normalize(a); b = normalize(b);
+  if (a === b) return 1;
+  if (a.includes(b) || b.includes(a)) return 0.85;
+  const wa = a.split(" ").filter(w => w.length > 1);
+  const wb = b.split(" ").filter(w => w.length > 1);
+  let matches = 0;
+  wa.forEach(x => { if (wb.includes(x)) matches++; });
+  const max = Math.max(wa.length, wb.length, 1);
+  return matches / max;
+}
+
+function getCurrentPool() {
+  return currentPhase === 1 ? PILOTS_2026 : PILOTS_LEGENDS;
+}
+
+function getUniquePilots() {
+  // Retorna lista de pilotos únicos (por nome) da fase atual
+  const pool = getCurrentPool();
+  const uniqueMap = new Map();
+  pool.forEach(p => {
+    if (!uniqueMap.has(p.name)) uniqueMap.set(p.name, p);
+  });
+  return Array.from(uniqueMap.values());
+}
+
+function getUniqueTeams() {
+  const pool = getCurrentPool();
+  return [...new Set(pool.map(p => p.team))];
+}
+
+function pickRandomPilot() {
+  const pool = getCurrentPool();
+  let available = pool.filter(p => !usedPilotNames.includes(p.name + "|" + p.team));
+  if (available.length === 0) {
+    usedPilotNames = [];
+    available = pool.slice();
+  }
+  const p = available[Math.floor(Math.random() * available.length)];
+  usedPilotNames.push(p.name + "|" + p.team);
+  if (usedPilotNames.length > 10) usedPilotNames.shift();
+  return p;
+}
+
+/* ============ ANIMAÇÃO DE BANDEIRAS ============ */
+function celebrateWin() {
+  flagsOverlay.innerHTML = '';
+  flagsOverlay.classList.add('show');
+
+  const totalFlags = 10;
+  for (let i = 0; i < totalFlags; i++) {
+    setTimeout(() => {
+      const flag = document.createElement('div');
+      flag.className = 'flag';
+      flag.style.top = (Math.random() * 60 + 10) + '%';
+      flag.style.animationDelay = (Math.random() * 0.4) + 's';
+      flag.style.animationDuration = (2.5 + Math.random() * 1.5) + 's';
+      flagsOverlay.appendChild(flag);
+    }, i * 120);
+  }
+
+  // Confetes quadriculados
+  for (let i = 0; i < 60; i++) {
+    setTimeout(() => {
+      const conf = document.createElement('div');
+      conf.className = 'confetti';
+      conf.style.left = Math.random() * 100 + '%';
+      conf.style.top = '-20px';
+      conf.style.background = Math.random() > 0.5 ? '#fff' : '#000';
+      conf.style.border = '1px solid ' + (Math.random() > 0.5 ? '#000' : '#fff');
+      conf.style.animationDuration = (2 + Math.random() * 2) + 's';
+      conf.style.animationDelay = (Math.random() * 0.5) + 's';
+      flagsOverlay.appendChild(conf);
+    }, i * 30);
+  }
+
+  // Flash verde
+  const flash = document.createElement('div');
+  flash.className = 'success-flash';
+  document.body.appendChild(flash);
+  setTimeout(() => flash.remove(), 1000);
+
+  // Limpar depois
+  setTimeout(() => {
+    flagsOverlay.classList.remove('show');
+    flagsOverlay.innerHTML = '';
+  }, 4500);
+}
+
+/* ============ AUTCOMPLETE ============ */
+function setupAutocomplete(input, acEl, getList) {
+  // Remove listeners antigos clonando (para permitir atualização da lista)
+  input.addEventListener('input', () => {
+    const val = normalize(input.value);
+    if (!val) { acEl.classList.remove('show'); acEl.innerHTML = ''; return; }
+    const matches = getList().filter(item =>
+      normalize(item).includes(val) && normalize(item) !== val
+    ).slice(0, 6);
+    if (matches.length === 0) {
+      acEl.classList.remove('show'); acEl.innerHTML = ''; return;
+    }
+    acEl.innerHTML = matches.map(m => `<div class="autocomplete-item">${m}</div>`).join('');
+    acEl.classList.add('show');
+    acEl.querySelectorAll('.autocomplete-item').forEach(el => {
+      el.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        input.value = el.textContent;
+        acEl.classList.remove('show');
+        acEl.innerHTML = '';
+      });
+    });
+  });
+  input.addEventListener('blur', () => {
+    setTimeout(() => { acEl.classList.remove('show'); acEl.innerHTML = ''; }, 150);
+  });
+  input.addEventListener('focus', () => {
+    if (input.value.trim()) input.dispatchEvent(new Event('input'));
+  });
+}
+
+setupAutocomplete(pilotInput, pilotAC, () => getUniquePilots().map(p => p.name));
+setupAutocomplete(teamInput, teamAC, () => getUniqueTeams());
+
+/* ============ UI ============ */
+function updateStats() {
+  document.getElementById('statPuzzles').textContent = stats.puzzles;
+  document.getElementById('statWins').textContent = stats.winsTotal;
+  document.getElementById('statStreak').textContent = stats.streak;
+}
+
+function updatePhaseBadge() {
+  document.getElementById('phaseNum').textContent = currentPhase;
+  document.getElementById('phaseName').textContent =
+    currentPhase === 1 ? 'Grid 2026' : 'Lendas da F1';
+}
+
+function updateProgress() {
+  const dots = progressContainer.querySelectorAll('.progress-dot');
+  dots.forEach((d, i) => {
+    d.classList.remove('active', 'wrong', 'correct');
+    if (i < currentAttempt - 1) d.classList.add('wrong');
+    else if (i === currentAttempt - 1 && !roundOver) d.classList.add('active');
+  });
+}
+
+function markDot(idx, state) {
+  const dots = progressContainer.querySelectorAll('.progress-dot');
+  if (dots[idx]) {
+    dots[idx].classList.remove('active');
+    dots[idx].classList.add(state);
+  }
+}
+
+function updateAttemptInfo() {
+  document.getElementById('currentAttempt').textContent = Math.min(currentAttempt, 4);
+}
+
+function clearFeedback() {
+  feedbackEl.innerHTML = '';
+}
+
+function addFeedback(type, title, text) {
+  const div = document.createElement('div');
+  div.className = 'feedback-card ' + type;
+  div.innerHTML = `<div class="feedback-title">${title}</div><div class="feedback-text">${text}</div>`;
+  feedbackEl.appendChild(div);
+}
+
+/* ============ LÓGICA ============ */
+function startNewRound() {
+  currentPilot = pickRandomPilot();
+  currentAttempt = 1;
+  roundOver = false;
+
+  pilotInput.value = '';
+  teamInput.value = '';
+  pilotInput.disabled = false;
+  teamInput.disabled = false;
+  guessBtn.disabled = false;
+  guessBtn.textContent = '🏁 Enviar Palpite';
+  guessBtn.style.display = 'block';
+  inputsContainer.style.display = 'flex';
+  progressContainer.style.display = 'flex';
+  resultEl.classList.remove('show');
+  resultEl.innerHTML = '';
+  phaseUpgradeEl.classList.remove('show');
+  phaseUpgradeEl.innerHTML = '';
+  clearFeedback();
+  updateProgress();
+  updateAttemptInfo();
+  updateStats();
+  updatePhaseBadge();
+  setTimeout(() => pilotInput.focus(), 100);
+}
+
+function makeGuess() {
+  if (roundOver) return;
+
+  const pGuess = pilotInput.value.trim();
+  const tGuess = teamInput.value.trim();
+
+  if (!pGuess || !tGuess) {
+    clearFeedback();
+    addFeedback('hint', '⚠️ Preencha os dois campos', 'Você precisa digitar o <strong>piloto</strong> E a <strong>equipe</strong>.');
+    return;
+  }
+
+  clearFeedback();
+
+  const pCorrect = normalize(pGuess) === normalize(currentPilot.name);
+  const tCorrect = normalize(tGuess) === normalize(currentPilot.team);
+
+  if (pCorrect && tCorrect) {
+    markDot(currentAttempt - 1, 'correct');
+    roundOver = true;
+    stats.winsTotal++;
+    stats.winsInPhase++;
+    stats.streak++;
+    stats.puzzles++;
+    updateStats();
+    celebrateWin();
+    showResult(true);
+    return;
+  }
+
+  // Feedback
+  if (pCorrect) {
+    addFeedback('correct', '✅ Piloto Correto!', `Você acertou o piloto: <strong>${currentPilot.name}</strong>`);
+  } else {
+    const sim = similarity(pGuess, currentPilot.name);
+    let dica = sim > 0.5 ? '🔥 Muito perto! O nome é bem similar.'
+              : sim > 0.2 ? '🌡️ Você está morno! Alguma parte bate.'
+              : '❄️ Longe! Pense melhor no piloto.';
+    addFeedback('wrong', '❌ Piloto Errado', `"${pGuess}" não é o piloto. ${dica}`);
+  }
+
+  if (tCorrect) {
+    addFeedback('correct', '✅ Equipe Correta!', `A equipe é: <strong>${currentPilot.team}</strong>`);
+  } else {
+    const sim = similarity(tGuess, currentPilot.team);
+    let dica = sim > 0.5 ? '🔥 Muito perto! A equipe é similar.'
+              : sim > 0.2 ? '🌡️ Você está morno!'
+              : '❄️ Longe! Pense melhor na equipe.';
+    addFeedback('wrong', '❌ Equipe Errada', `"${tGuess}" não é a equipe. ${dica}`);
+  }
+
+  // Dicas extras
+  const hints = [];
+  if (!pCorrect && !tCorrect) {
+    hints.push(`Nacionalidade: <strong>${currentPilot.nationality}</strong>`);
+  } else if (pCorrect && !tCorrect) {
+    hints.push(`A equipe começa com <strong>${currentPilot.team.charAt(0)}</strong>`);
+  } else if (!pCorrect && tCorrect) {
+    hints.push(`O número do piloto é <strong>${currentPilot.number}</strong>`);
+  }
+  if (hints.length) addFeedback('hint', '💡 Dica', hints.join('<br>'));
+
+  markDot(currentAttempt - 1, (pCorrect || tCorrect) ? 'correct' : 'wrong');
+  currentAttempt++;
+
+  if (currentAttempt > 4) {
+    roundOver = true;
+    stats.streak = 0;
+    stats.puzzles++;
+    updateStats();
+    showResult(false);
+    return;
+  }
+
+  updateProgress();
+  updateAttemptInfo();
+
+  if (!pCorrect) pilotInput.value = '';
+  if (!tCorrect) teamInput.value = '';
+  if (!pCorrect) pilotInput.focus();
+  else teamInput.focus();
+}
+
+function showResult(won) {
+  inputsContainer.style.display = 'none';
+  guessBtn.style.display = 'none';
+
+  const eraChip = currentPilot.era
+    ? `<div class="detail-chip">📅 Era <strong>${currentPilot.era}</strong></div>`
+    : '';
+
+  if (won) {
+    const canAdvance = currentPhase === 1 && stats.winsInPhase >= WINS_TO_ADVANCE;
+
+    resultEl.innerHTML = `
+      <div class="result-emoji">🏆</div>
+      <div class="result-title win">Parabéns!</div>
+      <div class="result-text">Você acertou em <strong>${currentAttempt} tentativa(s)</strong>!</div>
+      <div class="result-answer">
+        <div class="result-answer-label">🏁 Piloto</div>
+        <div class="result-answer-value">${currentPilot.name}</div>
+        <div class="result-answer-team">🏎️ ${currentPilot.team}</div>
+      </div>
+      <div class="result-details">
+        <div class="detail-chip">🌍 <strong>${currentPilot.nationality}</strong></div>
+        <div class="detail-chip">🔢 Número <strong>${currentPilot.number}</strong></div>
+        ${eraChip}
+      </div>
+      <button class="next-btn" id="nextBtn">Próximo Desafio 🏁</button>
+    `;
+    resultEl.classList.add('show');
+    document.getElementById('nextBtn').addEventListener('click', () => {
+      if (canAdvance) {
+        advancePhase();
+      } else {
+        startNewRound();
+      }
+    });
+  } else {
+    resultEl.innerHTML = `
+      <div class="result-emoji">💨</div>
+      <div class="result-title lose">Game Over</div>
+      <div class="result-text">Você usou todas as 4 tentativas. A resposta era:</div>
+      <div class="result-answer">
+        <div class="result-answer-label">🏁 Piloto</div>
+        <div class="result-answer-value">${currentPilot.name}</div>
+        <div class="result-answer-team">🏎️ ${currentPilot.team}</div>
+      </div>
+      <div class="result-details">
+        <div class="detail-chip">🌍 <strong>${currentPilot.nationality}</strong></div>
+        <div class="detail-chip">🔢 Número <strong>${currentPilot.number}</strong></div>
+        ${eraChip}
+      </div>
+      <button class="next-btn" id="nextBtn">Tentar Novamente 🔄</button>
+    `;
+    resultEl.classList.add('show');
+    document.getElementById('nextBtn').addEventListener('click', startNewRound);
+  }
+}
+
+function advancePhase() {
+  currentPhase = 2;
+  stats.winsInPhase = 0;
+  usedPilotNames = [];
+
+  inputsContainer.style.display = 'none';
+  guessBtn.style.display = 'none';
+  resultEl.classList.remove('show');
+  resultEl.innerHTML = '';
+  progressContainer.style.display = 'none';
+  clearFeedback();
+
+  phaseUpgradeEl.innerHTML = `
+    <div class="phase-upgrade-emoji">🏆</div>
+    <div class="phase-upgrade-title">Fase 2 Desbloqueada!</div>
+    <div class="phase-upgrade-text">
+      Você dominou o grid 2026!<br>
+      Agora é hora das <strong style="color:#ff6b00">LENDAS DA F1</strong>.<br>
+      Senna, Schumacher, Prost, Fangio e muito mais te esperam.
+    </div>
+    <button class="next-btn" id="startPhase2Btn">Começar Fase das Lendas 🏁</button>
+  `;
+  phaseUpgradeEl.classList.add('show');
+  updatePhaseBadge();
+
+  document.getElementById('startPhase2Btn').addEventListener('click', () => {
+    phaseUpgradeEl.classList.remove('show');
+    phaseUpgradeEl.innerHTML = '';
+    progressContainer.style.display = 'flex';
+    startNewRound();
+  });
+}
+
+/* ============ EVENTOS ============ */
+guessBtn.addEventListener('click', makeGuess);
+
+pilotInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') { e.preventDefault(); teamInput.focus(); }
+});
+teamInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') { e.preventDefault(); makeGuess(); }
+});
+
+/* ============ INICIAR ============ */
+startNewRound();
+</script>
 
 </body>
 </html>
